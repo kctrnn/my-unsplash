@@ -21,8 +21,7 @@ const photoSlice = createSlice({
 
   extraReducers: {
     [fetchPhotoList.fulfilled]: (state, action) => {
-      console.log(action);
-      //   state.list = action.payload;
+      state.list = action.payload;
     },
   },
 });
