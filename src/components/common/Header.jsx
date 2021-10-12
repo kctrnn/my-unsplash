@@ -25,7 +25,7 @@ const LogoContainer = styled.div`
 const Search = styled.div`
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 0.8rem 1rem;
 
   border: 1px solid #bdbdbd;
   border-radius: 0.75rem;
