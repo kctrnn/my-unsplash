@@ -1,6 +1,7 @@
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Footer } from 'components/common/Footer';
 import { Header } from 'components/common/Header';
+import { Modal } from 'components/common/Modal';
 import { Masonry } from 'masonic';
 import { useEffect, useState } from 'react';
 import ReactLoading from 'react-loading';
@@ -37,6 +38,7 @@ function ListPage() {
   const photoList = useSelector(selectPhotoList);
 
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -53,6 +55,14 @@ function ListPage() {
     })();
   }, [filter, dispatch]);
 
+  const handleAddPhotoClick = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModalClick = () => {
+    setShowModal(false);
+  };
+
   return (
     <Container>
       {loading && (
@@ -61,13 +71,15 @@ function ListPage() {
         </Loading>
       )}
 
-      <Header />
+      {!loading && <Header onAddPhotoClick={handleAddPhotoClick} />}
 
       {!loading && (
         <Masonry columnGutter={16} columnWidth={350} items={photoList} render={PhotoCard} />
       )}
 
-      <Footer />
+      {!loading && <Footer />}
+
+      <Modal isShow={showModal} onCloseModalClick={handleCloseModalClick} title="Add a new photo" />
     </Container>
   );
 }

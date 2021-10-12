@@ -1,6 +1,6 @@
-import Logo from '../../my_unsplash_logo.svg';
-import styled from 'styled-components';
 import { SearchOutline } from 'react-ionicons';
+import styled from 'styled-components';
+import Logo from '../../my_unsplash_logo.svg';
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +53,7 @@ const SearchInput = styled.input`
   }
 `;
 
-export const Header = () => {
+export const Header = ({ onAddPhotoClick }) => {
   return (
     <Container>
       <LogoContainer>
@@ -66,7 +66,7 @@ export const Header = () => {
         <SearchInput type="text" placeholder="Search by name" />
       </Search>
 
-      <ButtonContainer>
+      <ButtonContainer onClick={onAddPhotoClick}>
         <button className="btn btn-primary">Add a photo</button>
       </ButtonContainer>
     </Container>
