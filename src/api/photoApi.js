@@ -10,6 +10,11 @@ const photoApi = {
     const url = '/photos';
     return axiosClient.post(url, payload);
   },
+
+  delete(id) {
+    const url = `/photos/${id}`;
+    return axiosClient.delete(url);
+  },
 };
 
 export default photoApi;

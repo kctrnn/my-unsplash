@@ -45,6 +45,7 @@ function ListPage() {
   const photoList = useSelector(selectPhotoList);
 
   const showDeleteModal = useSelector((state) => state.photo.deleteMode);
+  const selectedPhotoId = useSelector((state) => state.photo.selectedPhotoId);
 
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -83,7 +84,22 @@ function ListPage() {
     history.push('/');
   };
 
-  const handleDeleteSubmit = async (data) => {};
+  const handleDeleteSubmit = async (password) => {
+    if (password !== process.env.REACT_APP_PASSWORD) {
+      enqueueSnackbar('Invalid password 😶', { variant: 'warning' });
+      return;
+    }
+
+    try {
+      await photoApi.delete(selectedPhotoId);
+      enqueueSnackbar('Delete photo successfully 😭', { variant: 'success' });
+    } catch (error) {
+      enqueueSnackbar('Delete photo failed 🥲', { variant: 'error' });
+    }
+
+    dispatch(setDeleteMode(false));
+    history.push('/');
+  };
 
   return (
     <Container>

@@ -1,5 +1,4 @@
 import { useSnackbar } from 'notistack';
-import { ArrowForward } from 'react-ionicons';
 import styled from 'styled-components';
 
 const Container = styled.div`

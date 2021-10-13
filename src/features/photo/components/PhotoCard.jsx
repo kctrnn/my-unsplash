@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setDeleteMode } from '../photoSlice';
+import { setDeleteMode, setSelectedPhotoId } from '../photoSlice';
 
 const Image = styled.img`
   width: 100%;
@@ -63,14 +63,19 @@ function PhotoCard(props) {
 
   const {
     index,
-    data: { url, label },
+    data: { url, label, id },
   } = props;
+
+  const handleDeleteClick = () => {
+    dispatch(setDeleteMode(true));
+    dispatch(setSelectedPhotoId(id));
+  };
 
   return (
     <Container>
       <Image src={url} alt={`p${index}`} />
 
-      <Button onClick={() => dispatch(setDeleteMode(true))}>delete</Button>
+      <Button onClick={handleDeleteClick}>delete</Button>
 
       <Label>{label}</Label>
     </Container>

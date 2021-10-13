@@ -11,7 +11,9 @@ const photoSlice = createSlice({
   initialState: {
     list: [],
     filter: {},
+
     deleteMode: false,
+    selectedPhotoId: '',
   },
 
   reducers: {
@@ -21,6 +23,10 @@ const photoSlice = createSlice({
 
     setDeleteMode(state, action) {
       state.deleteMode = action.payload;
+    },
+
+    setSelectedPhotoId(state, action) {
+      state.selectedPhotoId = action.payload;
     },
   },
 
@@ -32,7 +38,7 @@ const photoSlice = createSlice({
 });
 
 // Actions
-export const { setFilter, setDeleteMode } = photoSlice.actions;
+export const { setFilter, setDeleteMode, setSelectedPhotoId } = photoSlice.actions;
 
 // Selector
 export const selectPhotoList = (state) => state.photo.list;

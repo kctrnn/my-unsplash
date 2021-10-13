@@ -88,7 +88,12 @@ const Action = styled.div`
 `;
 
 export const DeleteModal = ({ isShow, onCloseModalClick, onDeleteSubmit }) => {
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { value: password } = e.target.password;
+    onDeleteSubmit?.(password);
+  };
 
   return (
     <Container isShow={isShow} onClick={onCloseModalClick}>
