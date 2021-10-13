@@ -1,14 +1,22 @@
 import { unwrapResult } from '@reduxjs/toolkit';
+import photoApi from 'api/photoApi';
+import { AddModal } from 'components/common/AddModal';
+import { DeleteModal } from 'components/common/DeleteModal';
 import { Footer } from 'components/common/Footer';
 import { Header } from 'components/common/Header';
-import { Modal } from 'components/common/Modal';
 import { Masonry } from 'masonic';
 import { useEffect, useState } from 'react';
 import ReactLoading from 'react-loading';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PhotoCard from '../components/PhotoCard';
-import { fetchPhotoList, selectPhotoFilter, selectPhotoList } from '../photoSlice';
+import {
+  fetchPhotoList,
+  selectPhotoFilter,
+  selectPhotoList,
+  setDeleteMode,
+  toggleDeleteMode,
+} from '../photoSlice';
 
 const Container = styled.div`
   max-width: 75rem;
@@ -37,7 +45,10 @@ function ListPage() {
   const filter = useSelector(selectPhotoFilter);
   const photoList = useSelector(selectPhotoList);
 
+  const showDeleteModal = useSelector((state) => state.photo.deleteMode);
+
   const [loading, setLoading] = useState(true);
+
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -61,7 +72,21 @@ function ListPage() {
 
   const handleCloseModalClick = () => {
     setShowModal(false);
+    dispatch(setDeleteMode(false));
   };
+
+  const handleAddSubmit = async (data) => {
+    try {
+      const response = await photoApi.add(data);
+      console.log(response);
+    } catch (error) {
+      console.log('Add photo failed: ', error);
+    }
+
+    setShowModal(false);
+  };
+
+  const handleDeleteSubmit = async (data) => {};
 
   return (
     <Container>
@@ -79,7 +104,17 @@ function ListPage() {
 
       {!loading && <Footer />}
 
-      <Modal isShow={showModal} onCloseModalClick={handleCloseModalClick} title="Add a new photo" />
+      <AddModal
+        isShow={showModal}
+        onCloseModalClick={handleCloseModalClick}
+        onAddSubmit={handleAddSubmit}
+      />
+
+      <DeleteModal
+        isShow={showDeleteModal}
+        onCloseModalClick={handleCloseModalClick}
+        onDeleteSubmit={handleDeleteSubmit}
+      />
     </Container>
   );
 }

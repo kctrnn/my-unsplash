@@ -47,7 +47,7 @@ const Title = styled.h3`
 `;
 
 const Form = styled.form`
-  margin-bottom: 1.5rem;
+  ${'' /* margin-bottom: 1.5rem; */}
 `;
 
 const FormGroup = styled.div`
@@ -80,42 +80,43 @@ const FormGroup = styled.div`
 
 const Action = styled.div`
   text-align: right;
+  margin-top: 1.5rem;
 
   & > *:last-child {
     margin-left: 0.5rem;
   }
 `;
 
-export const Modal = ({ title, onCloseModalClick, isDeleteMode = false, isShow }) => {
+export const DeleteModal = ({ isShow, onCloseModalClick, onDeleteSubmit }) => {
+  const handleSubmit = () => {};
+
   return (
     <Container isShow={isShow} onClick={onCloseModalClick}>
       <Content onClick={(e) => e.stopPropagation()}>
-        <Title>{title}</Title>
+        <Title>Are you sure?</Title>
 
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <label htmlFor="label">Label</label>
-            <input type="text" id="label" placeholder="Toronto skyline at sunset" />
-          </FormGroup>
-
-          <FormGroup>
-            <label htmlFor="photoUrl">Photo URL</label>
+            <label htmlFor="password">Password</label>
             <input
-              type="text"
-              id="photoUrl"
-              placeholder="https://images.unsplash.com/photo-1634003308715-7f3b46638942?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Type password to delete photo"
+              required
             />
           </FormGroup>
-        </Form>
 
-        <Action>
-          <button className="btn" onClick={onCloseModalClick}>
-            Cancel
-          </button>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </Action>
+          <Action>
+            <button type="button" className="btn" onClick={onCloseModalClick}>
+              Cancel
+            </button>
+
+            <button type="submit" className="btn btn-danger">
+              Delete
+            </button>
+          </Action>
+        </Form>
       </Content>
     </Container>
   );

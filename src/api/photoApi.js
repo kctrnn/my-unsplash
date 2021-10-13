@@ -1,9 +1,14 @@
 import axiosClient from './axiosClient';
 
 const photoApi = {
-  get(params) {
+  getAll(params) {
     const url = '/photos';
     return axiosClient.get(url, { params });
+  },
+
+  add(payload) {
+    const url = '/photos';
+    return axiosClient.post(url, payload);
   },
 };
 

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import photoApi from 'api/photoApi';
 
 export const fetchPhotoList = createAsyncThunk('photo/fetchPhotoList', async (payload) => {
-  const data = await photoApi.get(payload);
+  const data = await photoApi.getAll(payload);
   return data;
 });
 
@@ -11,11 +11,16 @@ const photoSlice = createSlice({
   initialState: {
     list: [],
     filter: {},
+    deleteMode: false,
   },
 
   reducers: {
     setFilter(state, action) {
       state.filter = action.payload;
+    },
+
+    setDeleteMode(state, action) {
+      state.deleteMode = action.payload;
     },
   },
 
@@ -27,7 +32,7 @@ const photoSlice = createSlice({
 });
 
 // Actions
-export const { setFilter } = photoSlice.actions;
+export const { setFilter, setDeleteMode } = photoSlice.actions;
 
 // Selector
 export const selectPhotoList = (state) => state.photo.list;
