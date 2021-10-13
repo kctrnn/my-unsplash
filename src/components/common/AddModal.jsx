@@ -1,3 +1,5 @@
+import { useSnackbar } from 'notistack';
+import { ArrowForward } from 'react-ionicons';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -39,6 +41,12 @@ const Content = styled.div`
   }
 `;
 
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const Title = styled.h3`
   font-size: 1.4rem;
   font-weight: 500;
@@ -56,7 +64,7 @@ const FormGroup = styled.div`
   label {
     display: inline-block;
     font-size: 0.875rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
 
   input {
@@ -87,13 +95,36 @@ const Action = styled.div`
   }
 `;
 
+const Link = styled.a`
+  font-size: 0.75rem;
+  color: #333;
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  transition: transform 200ms ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+`;
+
 export const AddModal = ({ isShow, onCloseModalClick, onAddSubmit }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const { value: label } = e.target.label;
+    const { value: url } = e.target.url;
+
+    if (!url.includes('https://images.unsplash.com')) {
+      enqueueSnackbar('URL should be image url in unsplash 🤣', { variant: 'info' });
+      return;
+    }
+
     const data = {
-      label: e.target.label.value,
-      url: e.target.url.value,
+      label,
+      url,
     };
 
     onAddSubmit?.(data);
@@ -102,7 +133,12 @@ export const AddModal = ({ isShow, onCloseModalClick, onAddSubmit }) => {
   return (
     <Container isShow={isShow} onClick={onCloseModalClick}>
       <Content onClick={(e) => e.stopPropagation()}>
-        <Title>Add a new photo</Title>
+        <Header>
+          <Title>Add a new photo</Title>
+          <Link href="https://unsplash.com/t/film" target="_blank">
+            Go to unsplash
+          </Link>
+        </Header>
 
         <Form onSubmit={handleSubmit}>
           <FormGroup>

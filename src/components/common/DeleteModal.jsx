@@ -56,7 +56,7 @@ const FormGroup = styled.div`
   label {
     display: inline-block;
     font-size: 0.875rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
 
   input {

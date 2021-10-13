@@ -5,18 +5,14 @@ import { DeleteModal } from 'components/common/DeleteModal';
 import { Footer } from 'components/common/Footer';
 import { Header } from 'components/common/Header';
 import { Masonry } from 'masonic';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import ReactLoading from 'react-loading';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PhotoCard from '../components/PhotoCard';
-import {
-  fetchPhotoList,
-  selectPhotoFilter,
-  selectPhotoList,
-  setDeleteMode,
-  toggleDeleteMode,
-} from '../photoSlice';
+import { fetchPhotoList, selectPhotoFilter, selectPhotoList, setDeleteMode } from '../photoSlice';
 
 const Container = styled.div`
   max-width: 75rem;
@@ -41,6 +37,9 @@ const Loading = styled.div`
 
 function ListPage() {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const filter = useSelector(selectPhotoFilter);
   const photoList = useSelector(selectPhotoList);
@@ -48,14 +47,12 @@ function ListPage() {
   const showDeleteModal = useSelector((state) => state.photo.deleteMode);
 
   const [loading, setLoading] = useState(true);
-
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         const action = fetchPhotoList(filter);
-
         const resultAction = await dispatch(action);
         unwrapResult(resultAction);
       } catch (error) {
@@ -77,13 +74,13 @@ function ListPage() {
 
   const handleAddSubmit = async (data) => {
     try {
-      const response = await photoApi.add(data);
-      console.log(response);
+      await photoApi.add(data);
+      enqueueSnackbar('Add photo successfully 🎉', { variant: 'success' });
     } catch (error) {
-      console.log('Add photo failed: ', error);
+      enqueueSnackbar('Add photo failed 😭', { variant: 'error' });
     }
 
-    setShowModal(false);
+    history.push('/');
   };
 
   const handleDeleteSubmit = async (data) => {};

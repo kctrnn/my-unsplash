@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setDeleteMode, toggleDeleteMode } from '../photoSlice';
+import { setDeleteMode } from '../photoSlice';
 
 const Image = styled.img`
   width: 100%;
