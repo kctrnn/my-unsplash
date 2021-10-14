@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { SearchOutline } from 'react-ionicons';
 import styled from 'styled-components';
 import Logo from '../../my_unsplash_logo.svg';
@@ -53,7 +54,28 @@ const SearchInput = styled.input`
   }
 `;
 
-export const Header = ({ onAddPhotoClick }) => {
+export const Header = ({ onAddPhotoClick, onSearchChange }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const typingTimeoutRef = useRef(null);
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+
+    if (!onSearchChange) return;
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      const formValues = {
+        q: e.target.value,
+      };
+
+      onSearchChange(formValues);
+    }, 300);
+  };
+
   return (
     <Container>
       <LogoContainer>
@@ -63,7 +85,12 @@ export const Header = ({ onAddPhotoClick }) => {
       <Search>
         <SearchOutline color={'#BDBDBD'} height="18px" width="18px" />
 
-        <SearchInput type="text" placeholder="Search by name" />
+        <SearchInput
+          type="text"
+          placeholder="Search by name"
+          value={searchTerm}
+          onChange={handleChange}
+        />
       </Search>
 
       <ButtonContainer onClick={onAddPhotoClick}>

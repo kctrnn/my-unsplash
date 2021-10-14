@@ -1,18 +1,31 @@
+import { useWindowSize } from '@react-hook/window-size';
 import { unwrapResult } from '@reduxjs/toolkit';
 import photoApi from 'api/photoApi';
 import { AddModal } from 'components/common/AddModal';
 import { DeleteModal } from 'components/common/DeleteModal';
 import { Footer } from 'components/common/Footer';
 import { Header } from 'components/common/Header';
-import { Masonry } from 'masonic';
+import {
+  useContainerPosition,
+  useMasonry,
+  usePositioner,
+  useResizeObserver,
+  useScroller,
+} from 'masonic';
 import { useSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactLoading from 'react-loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PhotoCard from '../components/PhotoCard';
-import { fetchPhotoList, selectPhotoFilter, selectPhotoList, setDeleteMode } from '../photoSlice';
+import {
+  fetchPhotoList,
+  selectPhotoFilter,
+  selectPhotoList,
+  setDeleteMode,
+  setFilter,
+} from '../photoSlice';
 
 const Container = styled.div`
   max-width: 75rem;
@@ -38,7 +51,6 @@ const Loading = styled.div`
 function ListPage() {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const filter = useSelector(selectPhotoFilter);
@@ -49,6 +61,16 @@ function ListPage() {
 
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+
+  // Masonry
+  const containerRef = useRef(null);
+  const [windowWidth, height] = useWindowSize();
+  const { offset, width } = useContainerPosition(containerRef, [windowWidth, height]);
+  const { scrollTop, isScrolling } = useScroller(offset);
+  const positioner = usePositioner({ width, columnGutter: 16, columnWidth: 350 }, [
+    photoList.length,
+  ]);
+  const resizeObserver = useResizeObserver(positioner);
 
   useEffect(() => {
     (async () => {
@@ -101,6 +123,15 @@ function ListPage() {
     history.push('/');
   };
 
+  const handleSearchChange = (newFilter) => {
+    const action = setFilter({
+      ...filter,
+      label_like: newFilter.q,
+    });
+
+    dispatch(action);
+  };
+
   return (
     <Container>
       {loading && (
@@ -109,11 +140,20 @@ function ListPage() {
         </Loading>
       )}
 
-      {!loading && <Header onAddPhotoClick={handleAddPhotoClick} />}
-
       {!loading && (
-        <Masonry columnGutter={16} columnWidth={350} items={photoList} render={PhotoCard} />
+        <Header onAddPhotoClick={handleAddPhotoClick} onSearchChange={handleSearchChange} />
       )}
+
+      {useMasonry({
+        positioner,
+        scrollTop,
+        isScrolling,
+        height,
+        containerRef,
+        items: photoList,
+        resizeObserver,
+        render: PhotoCard,
+      })}
 
       {!loading && <Footer />}
 

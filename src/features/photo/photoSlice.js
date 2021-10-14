@@ -10,7 +10,9 @@ const photoSlice = createSlice({
   name: 'photo',
   initialState: {
     list: [],
-    filter: {},
+    filter: {
+      label_like: '',
+    },
 
     deleteMode: false,
     selectedPhotoId: '',
