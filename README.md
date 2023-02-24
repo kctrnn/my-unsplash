@@ -82,9 +82,3 @@ $ npm start
 - [masonic](https://www.npmjs.com/package/masonic)
 - [Redux-Toolkit](https://redux-toolkit.js.org)
 - [styled-components](https://styled-components.com)
-
-## Contact
-
-- GitHub [@kctrnn](https://github.com/kctrnn)
-- Twitter [@kctrnn](https://twitter.com/kctrnn)
-- LinkedIn [@kctrnn](https://www.linkedin.com/in/kctrnn)
